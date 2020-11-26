@@ -6,9 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="product" />
+        <module name="website" />
+        <module name="zuul" />
         <module name="config" />
         <module name="eureka" />
-        <module name="product" />
       </profile>
     </annotationProcessing>
   </component>
@@ -17,6 +19,8 @@
       <module name="config" options="-parameters" />
       <module name="eureka" options="-parameters" />
       <module name="product" options="-parameters" />
+      <module name="website" options="-parameters" />
+      <module name="zuul" options="-parameters" />
     </option>
   </component>
 </project>

@@ -99,6 +99,8 @@
         <module>config</module>
         <module>eureka</module>
         <module>product</module>
+        <module>zuul</module>
+        <module>website</module>
     </modules>
 
 
