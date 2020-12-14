@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zfh.shop.product.mapper.SpuCommentMapper">
+    <select id="getSpuCommentListBySpuId" resultType="com.zfh.shop.product.bean.po.SpuComment">
+        select *
+	        from `spu_comment`
+	        <where>
+                <if test="bo.min_score != null and bo.max_score != null">
+                    scomm_score between ${bo.min_score} and ${bo.max_score}
+                </if>
+                <if test="bo.scomm_upload_type != null and bo.scomm_upload_type.length > 0">
+                    and scomm_photourls like '%${bo.scomm_upload_type}%'
+                </if>
+                <if test="bo.scomm_status != null">
+                    and scomm_status = #{bo.scomm_status}
+                </if>
+                <if test="bo.scomm_spu_id != null">
+                    and scomm_spu_id = #{bo.scomm_spu_id}
+                </if>
+                <if test="bo.scomm_spu_sku != null and bo.scomm_spu_sku.size > 0">
+                    <foreach collection="bo.scomm_spu_sku" item="sku">
+                        and scomm_spu_sku like '%${sku}%'
+                    </foreach>
+                </if>
+            </where>
+			<choose>
+                <when test="bo.sort != null and bo.sort == createtime">
+                    order by createtime desc
+                </when>
+                <otherwise>
+                    order by scomm_score desc
+                </otherwise>
+            </choose>
+		limit #{bo.start},#{bo.length}
+    </select>
+
+</mapper>

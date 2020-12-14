@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zfh.shop.order.mapper.OrderMapper">
+
+    <insert id="addOrder" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order` (
+            order_no,
+            order_status,
+            order_spuamount,
+            order_expressfee,
+            order_totalamount,
+            order_discountamount,
+            order_payamount,
+            order_paymode,
+            order_payplatform,
+            order_ipaddress,
+            order_paymentno,
+            order_remark,
+            createtime,
+            updatetime,
+            order_user_id
+        ) VALUES (
+            #{order.order_no},
+            #{order.order_status},
+            #{order.order_spuamount},
+            #{order.order_expressfee},
+            #{order.order_totalamount},
+            #{order.order_discountamount},
+            #{order.order_payamount},
+            #{order.order_paymode},
+            #{order.order_payplatform},
+            #{order.order_ipaddress},
+            #{order.order_paymentno},
+            #{order.order_remark},
+            #{order.createtime},
+            #{order.updatetime},
+            #{order.order_user_id}
+        )
+    </insert>
+
+    <update id="updateOrder">
+        UPDATE `order` SET
+            order_status = #{order.order_status},
+            order_spuamount = #{order.order_spuamount},
+            order_paymode = #{order.order_paymode},
+            order_payplatform = #{order.order_payplatform},
+            order_ipaddress = #{order.order_ipaddress},
+            order_paymentno = #{order.order_paymentno},
+            order_expressfee = #{order.order_expressfee},
+            order_totalamount = #{order.order_totalamount},
+            order_discountamount = #{order.order_discountamount},
+            order_payamount = #{order.order_payamount},
+            updatetime = #{order.updatetime},
+            order_remark = #{order.order_remark}
+            WHERE id = #{order.id}
+    </update>
+
+    <delete id="deleteOrder">
+        DELETE * FROM `order` WHERE id = #{id}
+    </delete>
+
+    <select id="getOrderById" resultType="com.zfh.shop.order.bean.po.Order">
+        SELECT * FROM `order` WHERE id = #{id}
+    </select>
+
+    <select id="getOrderById" resultType="com.zfh.shop.order.bean.po.Order">
+        SELECT * FROM `order` WHERE id = #{orderNo}
+    </select>
+
+    <select id="getOrderList" resultType="com.zfh.shop.order.bean.po.Order">
+        SELECT * FROM `order` WHERE order_user_id = #{order_user_id}
+    </select>
+
+
+</mapper>

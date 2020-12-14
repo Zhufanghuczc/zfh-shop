@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zfh.shop.product.mapper.SpuMapper">
+
+    <update id="updateSpuStock">
+        UPDATE `spu` SET spu_stock = spu_stock - #{count}
+            WHERE id = #{id}
+    </update>
+
+    <select id="getSpuVoById" resultMap="spuVo">
+        select * from `spu` where id = #{spu_id}
+    </select>
+
+    <select id="getSpuVoList" resultMap="spuVo">
+        select *
+	        from `spu` a
+		<where>
+            <if test="bo.spu_name != null and bo.spu_name.length > 0">
+                a.spu_name like '%${bo.spu_name}%'
+            </if>
+            <if test="bo.spu_title != null and bo.spu_title.length > 0">
+                and a.spu_title like '%${bo.spu_title}%'
+            </if>
+            <if test="bo.spu_introduction != null and bo.spu_introduction.length > 0">
+                and a.spu_introduction like '%${bo.spu_introduction}%'
+            </if>
+            <if test="bo.min_price != null and bo.max_price != null">
+                and (a.spu_price between #{bo.min_price} and #{bo.max_price})
+            </if>
+            <if test="bo.spu_status != null">
+                and	a.spu_status = #{bo.status}
+            </if>
+            <if test="bo.spu_brand_id != null">
+                and a.spu_brand_id = #{bo.spu_brand_id}
+            </if>
+            <if test="bo.spu_category_id != null">
+                and a.spu_category_id = #{bo.spu_category_id}
+            </if>
+            <if test="bo.spu_attr_value_id != null and bo.spu_attr_value_id.size > 0">
+                and a.id in (
+                    select spu_id
+                        from `spu_attr_value_spus`
+                        where spu_attr_value_id in
+                            <foreach collection="bo.spu_attr_value_id" separator="," item="value_id" open="(-1," close=")">
+                                #{value_id}
+                            </foreach>
+                        group by spu_id
+                        having count(spu_id) = ${bo.spu_attr_value_id.size}
+                )
+            </if>
+        </where>
+        <choose>
+            <when test="bo.sort != null and bo.sort.length > 0 ">
+                <choose>
+                    <when test="bo.sort == 'spu_price'">
+                        order by a.spu_price
+                    </when>
+                    <when test="bo.sort == 'spu_stock'">
+                        order by a.spu_stock
+                    </when>
+                    <otherwise>
+                        order by a.id
+                    </otherwise>
+                </choose>
+                <choose>
+                    <when test="bo.order != null and bo.order == 'desc'">
+                        desc
+                    </when>
+                    <otherwise>
+                        asc
+                    </otherwise>
+                </choose>
+            </when>
+            <otherwise>
+                order by a.id
+            </otherwise>
+        </choose>
+		limit #{bo.start},#{bo.length}
+    </select>
+
+
+
+    <resultMap id="spuVo" type="com.zfh.shop.product.bean.vo.SpuVo">
+        <id property="id" column="id"/>
+        <result column="spu_name" property="spu_name"/>
+        <result column="spu_title" property="spu_title"/>
+        <result column="spu_thumburl" property="spu_thumburl"/>
+        <result column="spu_price" property="spu_price"/>
+        <result column="spu_introduction" property="spu_introduction"/>
+        <result column="spu_stock" property="spu_stock"/>
+        <result column="spu_warningstock" property="spu_warningstock"/>
+        <result column="spu_maxbuy" property="spu_maxbuy"/>
+        <result column="spu_unit" property="spu_unit"/>
+        <result column="spu_status" property="spu_status"/>
+        <result column="createtime" property="createtime"/>
+        <result column="updatetime" property="updatetime"/>
+
+        <association
+                property="Brand"
+                javaType="com.zfh.shop.product.bean.po.Brand"
+                column="spu_brand_id"
+                select="com.zfh.shop.product.mapper.BannerMapper.getBrandById"
+            ></association>
+        <association
+                property="Category"
+                javaType="com.zfh.shop.product.bean.po.Category"
+                column="spu_category_id"
+                select="com.zfh.shop.product.mapper.CategoryMapper.getCategoryById"
+        ></association>
+
+        <collection
+                property="Sku"
+                ofType="com.zfh.shop.product.bean.po.Sku"
+                column="id"
+                select="com.zfh.shop.product.mapper.SkuMapper.getSkuListBySpuId"
+                fetchType="lazy"
+        ></collection>
+        <collection
+                property="Banner"
+                ofType="com.zfh.shop.product.bean.po.Banner"
+                column="id"
+                select="com.zfh.shop.product.mapper.SpuBannerMapper.getSpuBannerListBySpuId"
+                fetchType="lazy"
+        ></collection>
+
+    </resultMap>
+</mapper>

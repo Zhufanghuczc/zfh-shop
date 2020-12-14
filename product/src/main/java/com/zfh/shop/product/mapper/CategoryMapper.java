@@ -19,4 +19,10 @@ public interface CategoryMapper {
    * */
   List<Category> getCategoryListByParentId( @Param("parent_id") Integer parent_id );
 
+  /**
+   * 根据分类 id 获取分类对象
+   * @param id
+   * @return 分类对象
+   * */
+  Category getCategoryById( @Param("id") Integer id );
 }

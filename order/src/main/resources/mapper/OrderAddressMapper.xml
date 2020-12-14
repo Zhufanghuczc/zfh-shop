@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zfh.shop.order.mapper.OrderAddressMapper">
+    <insert id="addOrderAddress" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order_address` (
+            orderNo,
+            consignee,
+            phone,
+            province,
+            city,
+            district,
+            address,
+            updateTime
+        ) VALUES (
+            #{orderAddress.orderNo},
+            #{orderAddress.consignee},
+            #{orderAddress.consignee},
+            #{orderAddress.province},
+            #{orderAddress.city},
+            #{orderAddress.district},
+            #{orderAddress.address},
+            #{orderAddress.updateTime}
+        )
+    </insert>
+
+    <update id="updateOrderAddress">
+        UPDATE `order_address` SET
+            orderNo = #{orderAddress.orderNo},
+            consignee = #{orderAddress.consignee},
+            phone = #{orderAddress.consignee},
+            province = #{orderAddress.province},
+            city = #{orderAddress.city},
+            district = #{orderAddress.district},
+            address = #{orderAddress.address},
+            updateTime = #{orderAddress.updateTime}
+            WHERE id = #{orderAddress.id}
+    </update>
+
+    <delete id="deleteOrderAddress">
+        DELETE * FROM `order_address` WHERE orderNo = #{orderNo}
+    </delete>
+
+    <select id="getOrderAddressByOrderNo" resultType="com.zfh.shop.order.bean.po.OrderAddress">
+        SELECT * FROM `order_address` WHERE orderNo = #{orderNo}
+    </select>
+</mapper>

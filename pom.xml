@@ -101,6 +101,9 @@
         <module>product</module>
         <module>zuul</module>
         <module>website</module>
+        <module>spu</module>
+        <module>custom</module>
+        <module>order</module>
     </modules>
 
 

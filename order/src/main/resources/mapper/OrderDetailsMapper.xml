@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zfh.shop.order.mapper.OrderDetailsMapper">
+    <insert id="addOrderDetailsList" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `order_details` (
+            odtails_name,
+            odtails_thumburl,
+            odtails_price,
+            odtails_count,
+            odtails_amount,
+            odtails_scorestatus,
+            odtails_score,
+            odtails_comment,
+            odtails_photourls,
+            createtime,
+            updatetime,
+            odtails_orderno_id,
+            odtails_sku_id,
+            odtails_spu_id
+        ) VALUES
+            <foreach collection="orderDetailsList" item="orderDetails" separator=",">
+                (
+                    #{orderDetails.odtails_name},
+                    #{orderDetails.odtails_thumburl},
+                    #{orderDetails.odtails_price},
+                    #{orderDetails.odtails_count},
+                    #{orderDetails.odtails_amount},
+                    #{orderDetails.odtails_scorestatus},
+                    #{orderDetails.odtails_score},
+                    #{orderDetails.odtails_comment},
+                    #{orderDetails.odtails_photourls},
+                    #{orderDetails.createtime},
+                    #{orderDetails.updatetime},
+                    #{orderDetails.odtails_orderno_id},
+                    #{orderDetails.odtails_sku_id},
+                    #{orderDetails.odtails_spu_id}
+                )
+            </foreach>
+    </insert>
+
+    <update id="updateOrderDetails">
+        UPDATE `order_details`
+            SET
+                odtails_count = #{orderDetails.odtails_count},
+                odtails_amount = #{orderDetails.odtails_amount},
+                odtails_scorestatus = #{orderDetails.odtails_scorestatus},
+                updatetime = #{orderDetails.updatetime}
+            WHERE
+                id = #{orderDetails.id}
+    </update>
+
+    <delete id="deleteOrderDetails">
+        DELETE * FROM `order_details` WHERE odtails_orderno_id = #{order_id}
+    </delete>
+
+    <select id="getOrderDetailsByOrderId" resultType="com.zfh.shop.order.bean.po.OrderDetails">
+        SELECT * FROM `order_details` WHERE odtails_orderno_id = #{order_id}
+    </select>
+</mapper>
